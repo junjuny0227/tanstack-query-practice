@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-type Post = {
+type Article = {
   userId: number;
   id: number;
   title: string;
@@ -9,7 +9,7 @@ type Post = {
 };
 
 const getData = async () => {
-  const { data } = await axios.get<Post[]>(
+  const { data } = await axios.get<Article[]>(
     "https://jsonplaceholder.typicode.com/posts"
   );
   return data;
@@ -17,7 +17,7 @@ const getData = async () => {
 
 const App = () => {
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["posts"],
+    queryKey: ["articles"],
     queryFn: getData,
     staleTime: 5 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
@@ -30,10 +30,10 @@ const App = () => {
     <div>
       <h1>TanStack Query</h1>
       <button onClick={() => refetch()}>refetch</button>
-      {data?.map((post) => (
-        <div key={post.id}>
-          <h2>{post.title}</h2>
-          <p>{post.body}</p>
+      {data?.map((article) => (
+        <div key={article.id}>
+          <h2>{article.title}</h2>
+          <p>{article.body}</p>
         </div>
       ))}
     </div>
