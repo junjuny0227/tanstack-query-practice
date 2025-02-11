@@ -16,7 +16,7 @@ const getData = async () => {
 };
 
 const App = () => {
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["posts"],
     queryFn: getData,
     staleTime: 5 * 60 * 1000,
@@ -29,6 +29,7 @@ const App = () => {
   return (
     <div>
       <h1>TanStack Query</h1>
+      <button onClick={() => refetch()}>refetch</button>
       {data?.map((post) => (
         <div key={post.id}>
           <h2>{post.title}</h2>
