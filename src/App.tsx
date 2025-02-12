@@ -1,6 +1,6 @@
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type Article = {
   userId: number;
@@ -33,11 +33,10 @@ const postData = async ({ title, body }: ArticleInput) => {
   return data;
 };
 
-const queryClient = new QueryClient();
-
 const App = () => {
   const [title, setTitle] = useState<string>("");
   const [body, setBody] = useState<string>("");
+  const [articles, setArticles] = useState<Article[]>([]);
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["articles"],
@@ -46,10 +45,14 @@ const App = () => {
     gcTime: 30 * 60 * 1000,
   });
 
+  useEffect(() => {
+    if (data) setArticles(data);
+  }, [data]);
+
   const { mutate } = useMutation({
     mutationFn: postData,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["articles"] });
+    onSuccess: (newArticle) => {
+      setArticles((prev) => [newArticle, ...prev]);
     },
   });
 
@@ -82,7 +85,7 @@ const App = () => {
         />
         <button>post</button>
       </form>
-      {data?.map((article) => (
+      {articles.map((article) => (
         <div key={article.id}>
           <h2>{article.title}</h2>
           <p>{article.body}</p>
