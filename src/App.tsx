@@ -47,6 +47,7 @@ const App = () => {
 
   useEffect(() => {
     if (data) setArticles(data);
+    // JSONPlaceholder는 DB가 수정되지 않고 고정된 데이터를 반환하는 API여서 useEffect를 사용해 처음 데이터를 가져올 때 상태에 저장하는 방식으로 구현했습니다.
   }, [data]);
 
   const { mutate } = useMutation({
