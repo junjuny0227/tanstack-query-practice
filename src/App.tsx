@@ -53,6 +53,7 @@ const App = () => {
   const { mutate } = useMutation({
     mutationFn: postData,
     onSuccess: (newArticle) => {
+      refetch();
       setArticles((prev) => [newArticle, ...prev]);
     },
   });
